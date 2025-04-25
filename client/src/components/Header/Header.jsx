@@ -38,13 +38,15 @@ const Header = () => {
                             <FaUser className="mx-auto text-xl" />
                             <p>Đăng nhập</p>
                         </div>
-                        <div className="relative">
-                            <FaShoppingBasket className="mx-auto text-xl" />
-                            <span className="absolute top-0 right-[-10px] bg-cyan-100 text-xs text-black rounded-full px-1">
-                                0
-                            </span>
-                            <p>Giỏ hàng</p>
-                        </div>
+                        <Link to={'/cart'}>
+                            <div className="relative">
+                                <FaShoppingBasket className="mx-auto text-xl" />
+                                <span className="absolute top-0 right-[-10px] bg-cyan-100 text-xs text-black rounded-full px-1">
+                                    0
+                                </span>
+                                <p>Giỏ hàng</p>
+                            </div>
+                        </Link>
                     </div>
                 </div>
 

@@ -117,23 +117,5 @@ export default function ProductDetail() {
             </div>
         </div>
     );
-} <div className="my-10 border-t pt-6">
-    <h3 className="text-xl font-semibold mb-3">Mô Tả</h3>
-    <ul className="list-disc list-outside pl-4 space-y-2 text-sm text-justify">
-        <li><strong>Thương hiệu:</strong> Royal Canin</li>
-        <li><strong>Phù hợp cho:</strong> Mèo nhà trưởng thành (trên 12 tháng tuổi)</li>
-        <li>Thức ăn cho mèo Royal Canin Indoor giúp kiểm soát cân nặng, giảm mùi hôi và tốt cho lông mèo.</li>
-        <li>Lợi ích:
-            <ul className="list-disc list-outside pl-6 mt-2 space-y-1">
-                <li>
-                    <strong>GIẢM MÙI HÔI CHẤT THẢI:</strong> Các protein giúp tiêu hóa tốt, giảm mùi và bảo vệ hệ tiêu hóa.
-                </li>
-                <li>
-                    <strong>QUẢN LÝ CÂN NẶNG:</strong> Giảm calo phù hợp cho mèo ít hoạt động.
-                </li>
-            </ul>
-        </li>
-    </ul>
-    <button className="mt-4 px-4 py-1 border rounded hover:bg-gray-100">Đọc thêm</button>
-</div>
+}
 
