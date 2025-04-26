@@ -3,11 +3,19 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import { Link } from "react-router-dom";
+import Product from "./Product";
 const Shopping = () => {
     const images = [
         '/assets/banner1.png',
         '/assets/banner2.png'
     ];
+    const products = new Array(5).fill({
+        name: "Royal Canin",
+        description: "Thức Ăn Hạt Cho Mèo Trưởng Thành Nuôi Trong Nhà Royal Canin Indoor 27",
+        price: "124.000đ",
+        salePrice: "115.000đ",
+        image: "/assets/food.png"
+    });
     return (
         <div className="bg-white">
             <Swiper
@@ -74,10 +82,28 @@ const Shopping = () => {
             </div>
 
             {/* Section: Được boss yêu thích */}
-            <ProductSection title="Được boss yêu thích" />
+            <div className="px-4 py-6">
+                <h2 className="text-lg font-semibold mb-4">Được boss yêu thích</h2>
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                    {products.map((product, index) => (
+                        <Link to={'/detail'}>
+                            <Product product={product} index={index} />
+                        </Link>
+                    ))}
+                </div>
+            </div>
 
             {/* Section: Hàng mới về */}
-            <ProductSection title="Hàng mới về" />
+            <div className="px-4 py-6">
+                <h2 className="text-lg font-semibold mb-4">Hàng mới về</h2>
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                    {products.map((product, index) => (
+                        <Link to={'/detail'}>
+                            <Product product={product} index={index} />
+                        </Link>
+                    ))}
+                </div>
+            </div>
 
             {/* Section: Thương hiệu */}
             <div className="px-4 py-6">
@@ -87,29 +113,6 @@ const Shopping = () => {
                         <img key={i} src={`/assets/${logo}`} alt="brand" className="p-3 border-b shadow rounded-md h-25 object-contain mx-auto" />
                     ))}
                 </div>
-            </div>
-        </div>
-    );
-};
-
-const ProductSection = ({ title }) => {
-    return (
-        <div className="px-4 py-6">
-            <h2 className="text-lg font-semibold mb-4">{title}</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                {Array.from({ length: 5 }).map((_, i) => (
-                    <Link to={'/detail'}>
-                        <div key={i} className="border p-2 rounded-lg shadow hover:shadow-md">
-                            <img src="/assets/food.png" alt="Product" className="h-32 mx-auto mb-2" />
-                            <h3 className="text-sm font-bold text-blue-700">Royal Canin</h3>
-                            <p className="text-xs text-gray-600">Thức Ăn Hạt Cho Mèo Trưởng Thành...</p>
-                            <div className="flex gap-2 text-sm mt-1">
-                                <span className="line-through text-gray-500">124.000đ</span>
-                                <span className="text-red-500 font-semibold">115.000đ</span>
-                            </div>
-                        </div>
-                    </Link>
-                ))}
             </div>
         </div>
     );

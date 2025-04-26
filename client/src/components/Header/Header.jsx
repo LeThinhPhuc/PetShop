@@ -15,8 +15,8 @@ const Header = () => {
                 <div className="flex justify-between items-center px-6 py-2">
                     {/* Logo */}
                     <Link to={'/'}>
-                        <div className="flex items-center gap-2">
-                            <img src="/assets/logo-removebg.png" alt="Logo" className="h-14" />
+                        <div className="flex items-center justify-center">
+                            <img src="/assets/logo-removebg.png" alt="Logo" className="h-15" />
                         </div>
                     </Link>
 
@@ -52,15 +52,51 @@ const Header = () => {
 
                 {/* Navigation */}
                 <nav className="flex justify-center gap-10 text-white font-medium py-2">
-                    <Link to={'/pet/Chó'}>
-                        <a href="#">Chó</a>
+                    <div className="relative group">
+                        Chó
+                        {/* Dropdown content */}
+                        <div className="absolute left-0 mt-2 w-48 bg-white text-black rounded shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-20">
+                            <ul className="py-2">
+                                <Link to="/pet/Chó" className="hover:underline">
+                                    <li className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Chó 1</li>
+                                    <li className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Chó 2</li>
+                                    <li className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Chó 3</li>
+                                </Link>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div className="relative group">
+                        Mèo
+                        {/* Dropdown content */}
+                        <div className="absolute left-0 mt-2 w-48 bg-white text-black rounded shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-20">
+                            <ul className="py-2">
+                                <Link to="/pet/Mèo" className="hover:underline">
+                                    <li className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Mèo 1</li>
+                                    <li className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Mèo 2</li>
+                                    <li className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Mèo 3</li>
+                                </Link>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div>
+                        Thiết bị thông minh
+                    </div>
+
+                    <Link
+                        to="/order"
+                        className="text-white"
+                    >
+                        Đơn hàng của bạn
                     </Link>
-                    <Link to={'/pet/Mèo'}>
-                        <a href="#">Mèo</a>
-                    </Link>
-                    <a href="#">Thiết bị thông minh</a>
-                    <a href="#">Đơn hàng của bạn</a>
-                    <a href="#">Tin tức</a>
+
+
+
+
+                    <div>
+                        Tin tức
+                    </div>
                 </nav>
 
                 {/* Bottom strip */}

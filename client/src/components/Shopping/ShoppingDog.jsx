@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useParams } from "react-router-dom";
+import Product from './Product';
 const products = new Array(12).fill({
     name: "Royal Canin",
     description: "Thức Ăn Hạt Cho Mèo Trưởng Thành Nuôi Trong Nhà Royal Canin Indoor 27",
@@ -67,15 +68,7 @@ const ShoppingDog = ({ name }) => {
                 <div className="col-span-1 md:col-span-3 grid grid-cols-2 md:grid-cols-3 gap-6">
                     {products.map((product, index) => (
                         <Link to={'/detail'}>
-                            <div key={index} className="p-3 rounded-lg hover:shadow-md">
-                                <img src={product.image} alt="product" className="w-full h-40 object-contain" />
-                                <h3 className="text-blue-700 font-semibold mt-2">{product.name}</h3>
-                                <p className="text-sm">{product.description}</p>
-                                <div className="mt-1">
-                                    <span className="line-through text-gray-500 mr-2">{product.price}</span>
-                                    <span className="text-red-600 font-semibold">{product.salePrice}</span>
-                                </div>
-                            </div>
+                            <Product product={product} index={index} />
                         </Link>
                     ))}
                 </div>
