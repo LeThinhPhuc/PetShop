@@ -21,6 +21,8 @@ public class SanPham {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "maSanPham")
     private Integer maSanPham;
+    @Column(name="tenSanPham")
+    private String tenSanPham;
     @Column(name="moTa")
     private String moTa;
     @Column(name="hinhAnh")

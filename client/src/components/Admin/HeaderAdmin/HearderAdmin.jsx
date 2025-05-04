@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FaSearch, FaUser, FaShoppingBasket } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Modal from "./Modal";
-const Header = () => {
+const HeaderAdmin = () => {
     const [checkModal, setCheckModal] = useState(false);
     const changeStatus = () => {
         setCheckModal(false);
@@ -14,22 +14,15 @@ const Header = () => {
                 {/* Top section */}
                 <div className="flex justify-between items-center px-6 py-2">
                     {/* Logo */}
-                    <Link to={'/'}>
+                    <Link to={'/admin/product'}>
                         <div className="flex items-center justify-center">
                             <img src="/assets/logo-removebg.png" alt="Logo" className="h-15" />
                         </div>
                     </Link>
 
                     {/* Search */}
-                    <div className="flex items-center w-1/2">
-                        <input
-                            type="text"
-                            placeholder="Bạn cần tìm gì?"
-                            className="flex-1 py-2 px-4 rounded-l-full border-b"
-                        />
-                        <button className="bg-cyan-300 px-4 py-2 rounded-r-full text-blue-700 text-xl">
-                            <FaSearch />
-                        </button>
+                    <div className="flex items-center justify-center w-1/2 text-4xl font-bold">
+                        Xin chào admin !!! Bạn cần xem gì ?
                     </div>
 
                     {/* Login + Cart */}
@@ -38,73 +31,18 @@ const Header = () => {
                             <FaUser className="mx-auto text-xl" />
                             <p>Đăng nhập</p>
                         </div>
-                        <Link
-                            to="/admin/product"
-                            onClick={() => window.location.href = '/admin/product'}
-                        >
-                            <FaUser className="mx-auto text-xl" />
-                            <p>Admin</p>
-                        </Link>
-
-                        <Link to={'/cart'}>
-                            <div className="relative">
-                                <FaShoppingBasket className="mx-auto text-xl" />
-                                <span className="absolute top-0 right-[-10px] bg-cyan-100 text-xs text-black rounded-full px-1">
-                                    0
-                                </span>
-                                <p>Giỏ hàng</p>
-                            </div>
-                        </Link>
                     </div>
                 </div>
 
                 {/* Navigation */}
-                <nav className="flex justify-center gap-10 text-white font-medium py-2">
-                    <div className="relative group">
-                        Chó
-                        {/* Dropdown content */}
-                        <div className="absolute left-0 mt-2 w-48 bg-white text-black rounded shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-20">
-                            <ul className="py-2">
-                                <Link to="/pet/Chó" className="hover:underline">
-                                    <li className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Chó 1</li>
-                                    <li className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Chó 2</li>
-                                    <li className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Chó 3</li>
-                                </Link>
-                            </ul>
-                        </div>
-                    </div>
+                <nav className="flex justify-around gap-10 text-white font-medium py-2">
 
-                    <div className="relative group">
-                        Mèo
-                        {/* Dropdown content */}
-                        <div className="absolute left-0 mt-2 w-48 bg-white text-black rounded shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-20">
-                            <ul className="py-2">
-                                <Link to="/pet/Mèo" className="hover:underline">
-                                    <li className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Mèo 1</li>
-                                    <li className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Mèo 2</li>
-                                    <li className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Mèo 3</li>
-                                </Link>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div>
-                        Thiết bị thông minh
-                    </div>
-
-                    <Link
-                        to="/order"
-                        className="text-white"
-                    >
-                        Đơn hàng của bạn
+                    <Link to={"/admin/voucher"} className="text-white">
+                        Tạo mã khuyến mãi
                     </Link>
-
-
-
-
-                    <div>
-                        Tin tức
-                    </div>
+                    <Link to={"/admin/statistic"}>
+                        Thống kê
+                    </Link>
                 </nav>
 
                 {/* Bottom strip */}
@@ -178,4 +116,4 @@ const Header = () => {
     );
 };
 
-export default Header;
+export default HeaderAdmin;

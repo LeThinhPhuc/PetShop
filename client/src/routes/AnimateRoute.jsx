@@ -15,6 +15,10 @@ import ShoppingDog from "../components/Shopping/ShoppingDog";
 import ProductDetail from "../components/Shopping/ProductDetail";
 import Order from "../components/Shopping/Order";
 import OrderDetail from "../components/Shopping/OrderDetail";
+import Product from "../components/Admin/Product/Product";
+import ProductDescription from "../components/Admin/Product/ProductDescription/ProductDescription";
+import Statistic from "../components/Admin/Statistic/Statistic";
+import Voucher from "../components/Admin/Voucher/Voucher";
 const AnimateRoute = () => {
     const location = useLocation();
 
@@ -27,6 +31,10 @@ const AnimateRoute = () => {
             <Route path="/cart" element={<Cart />} />
             <Route path="/order" element={<Order />} />
             <Route path="/order-detail" element={<OrderDetail />} />
+            <Route path="/admin/voucher" element={<Voucher />} />
+            <Route path="/admin/statistic" element={<Statistic />} />
+            <Route path="/admin/product" element={<Product />} />
+            <Route path="/admin/product-detail" element={<ProductDescription />} />
             <Route
                 path="*"
                 element={

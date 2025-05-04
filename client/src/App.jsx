@@ -5,13 +5,14 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import AnimateRoute from './routes/AnimateRoute'
 import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
+import HeaderAdmin from './components/Admin/HeaderAdmin/HearderAdmin'
 
 function App() {
 
   return (
     <div className="w-screen min-h-screen overflow-x-hidden">
       <Router>
-        <Header />
+        {window.location.href.includes("/admin") ? <HeaderAdmin /> : <Header />}
         <AnimateRoute />
         <Footer />
       </Router>
