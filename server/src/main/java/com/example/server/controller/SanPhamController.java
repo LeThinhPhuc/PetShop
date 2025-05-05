@@ -42,16 +42,17 @@ public class SanPhamController {
             SanPham sanPham = sanPhamService.createSanPham(dto);
             return ResponseEntity.ok(sanPham);
         } catch (Exception ex) {
+            System.out.println(ex.getMessage());
             return ResponseEntity.badRequest().body(Response.of(HttpStatus.BAD_REQUEST, ex.getMessage()));
         }
     }
 
     // Update a question
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateSanPham(@PathVariable String id, @RequestBody SanPham updatedProduct) {
+    public ResponseEntity<?> updateSanPham(@PathVariable String id, @RequestBody SanPhamDTO updatedProduct) {
         try {
-            SanPham question = sanPhamService.updateSanPham(id, updatedProduct);
-            return ResponseEntity.ok(question);
+            SanPham sanPham = sanPhamService.updateSanPham(id, updatedProduct);
+            return ResponseEntity.ok(sanPham);
         } catch (Exception ex) {
             Response response = Response.of(HttpStatus.BAD_REQUEST, ex.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);

@@ -66,30 +66,40 @@ public class SanPhamService {
 
     // Update a question
     @Transactional
-    public SanPham updateSanPham(String id, SanPham updatedSanPham) {
-        SanPham question = findSanPhamById(id);
+    public SanPham updateSanPham(String id, SanPhamDTO dto) {
+        SanPham sanPham = findSanPhamById(id);
 
-        if (updatedSanPham.getLoaiSanPham() != null) {
-            question.setLoaiSanPham(updatedSanPham.getLoaiSanPham());
+        if (dto.getTenSanPham() != null) {
+            sanPham.setTenSanPham(dto.getTenSanPham());
         }
-        if (updatedSanPham.getThuongHieu() != null) {
-            question.setThuongHieu(updatedSanPham.getThuongHieu());
+        if (dto.getMoTa() != null) {
+            sanPham.setMoTa(dto.getMoTa());
         }
-        if (updatedSanPham.getTonKho() != null) {
-            question.setTonKho(updatedSanPham.getTonKho());
+        if (dto.getTonKho() != null) {
+            sanPham.setTonKho(dto.getTonKho());
         }
-        if (updatedSanPham.getKichCo() != null) {
-            question.setKichCo(updatedSanPham.getKichCo());
-        }
-        if (updatedSanPham.getMoTa() != null) {
-            question.setMoTa(updatedSanPham.getMoTa());
-        }
-        if (updatedSanPham.getHinhAnh() != null) {
-            question.setHinhAnh(updatedSanPham.getHinhAnh());
+        if (dto.getHinhAnh() != null) {
+            sanPham.setHinhAnh(dto.getHinhAnh());
         }
 
-        return sanPhamRepository.save(question);
+        if (dto.getMaLoaiSanPham() != null) {
+            sanPham.setLoaiSanPham(loaiSanPhamRepository.findById(String.valueOf(dto.getMaLoaiSanPham()))
+                    .orElseThrow(() -> new IllegalArgumentException("Loại sản phẩm không tồn tại")));
+        }
+
+        if (dto.getMaKichCo() != null) {
+            sanPham.setKichCo(kichCoRepository.findById(String.valueOf(dto.getMaKichCo()))
+                    .orElseThrow(() -> new IllegalArgumentException("Kích cỡ không tồn tại")));
+        }
+
+        if (dto.getMaThuongHieu() != null) {
+            sanPham.setThuongHieu(thuongHieuRepository.findById(String.valueOf(dto.getMaThuongHieu()))
+                    .orElseThrow(() -> new IllegalArgumentException("Thương hiệu không tồn tại")));
+        }
+
+        return sanPhamRepository.save(sanPham);
     }
+
 
     // Delete a question
     @Transactional
