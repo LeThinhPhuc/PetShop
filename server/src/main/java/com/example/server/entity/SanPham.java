@@ -10,8 +10,6 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -29,6 +27,8 @@ public class SanPham {
     private String hinhAnh;
     @Column(name="tonKho")
     private Integer tonKho;
+    @Column(name="giaSanPham")
+    private Double giaSanPham;
     @Column(name="ngayTao")
     private LocalDateTime ngayTao;
     @OneToMany(mappedBy = "sanPham", cascade = CascadeType.ALL)
@@ -48,4 +48,5 @@ public class SanPham {
     @ManyToOne
     @JoinColumn(name = "maThuongHieu") // FK tới bảng ThuongHieu
     private ThuongHieu thuongHieu;
+
 }

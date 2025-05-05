@@ -1,5 +1,6 @@
 package com.example.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,8 +10,6 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -22,8 +21,7 @@ public class KichCo {
     private Integer maKichCo;
     @Column(name = "tenKichCo")
     private String tenKichCo;
-    @Column(name="giaSanPham")
-    private Double giaSanPham;
     @OneToMany(mappedBy = "kichCo")
+    @JsonIgnore
     private List<SanPham> danhSachSanPham;
 }
