@@ -6,7 +6,7 @@ import "./QuillEditor.css";
 
 const QuillEditor = (props) => {
     const [editorHtml, setEditorHtml] = useState("<p>&nbsp;</p>");
-    const { value, placeholder, onEditorChange } = props;
+    const { value, onEditorChange } = props;
 
     const handleChange = (html) => {
         // console.log('html', html);

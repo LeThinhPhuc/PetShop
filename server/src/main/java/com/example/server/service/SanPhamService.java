@@ -50,6 +50,7 @@ public class SanPhamService {
         sanPham.setTonKho(dto.getTonKho());
         sanPham.setHinhAnh(dto.getHinhAnh());
         sanPham.setNgayTao(LocalDateTime.now());
+        sanPham.setGiaSanPham(dto.getGiaSanPham());
 
         sanPham.setLoaiSanPham(loaiSanPhamRepository.findById(String.valueOf(dto.getMaLoaiSanPham()))
                 .orElseThrow(() -> new IllegalArgumentException("Loại sản phẩm không tồn tại")));

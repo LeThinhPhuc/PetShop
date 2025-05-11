@@ -34,7 +34,7 @@ const AnimateRoute = () => {
             <Route path="/admin/voucher" element={<Voucher />} />
             <Route path="/admin/statistic" element={<Statistic />} />
             <Route path="/admin/product" element={<Product />} />
-            <Route path="/admin/product-detail" element={<ProductDescription />} />
+            <Route path="/admin/product-detail/:id" element={<ProductDescription />} />
             <Route
                 path="*"
                 element={

@@ -13,4 +13,5 @@ public class SanPhamDTO {
     private Integer maLoaiSanPham;
     private Integer maKichCo;
     private Integer maThuongHieu;
+    private Double giaSanPham;
 }

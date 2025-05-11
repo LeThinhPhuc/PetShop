@@ -37,7 +37,7 @@ const HeaderAdmin = () => {
                 {/* Navigation */}
                 <nav className="flex justify-around gap-10 text-white font-medium py-2">
 
-                    <Link to={"/admin/voucher"} className="text-white">
+                    <Link to={"/admin/voucher"}>
                         Tạo mã khuyến mãi
                     </Link>
                     <Link to={"/admin/statistic"}>

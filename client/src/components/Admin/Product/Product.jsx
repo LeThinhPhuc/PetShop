@@ -1,12 +1,34 @@
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { deleteProduct, fetchProducts } from "../../../store/productSlice";
+import React, { useEffect } from "react";
 
 const Product = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { list, loading, error } = useSelector((state) => state.products);
+
+    useEffect(() => {
+        dispatch(fetchProducts());
+    }, [dispatch]);
+
+    const handleDelete = async (id) => {
+        const result = await dispatch(deleteProduct(id));
+        if (deleteProduct.fulfilled.match(result)) {
+            dispatch(fetchProducts());
+        }
+    };
+    const handleClickNew = () => {
+        navigate('/admin/product-detail/0');
+        window.location.reload(); // Force reload sau khi điều hướng
+    };
+
     return (
         <div className="max-w-[95%] mx-auto p-2">
             <div>
                 Thống kê sản phẩm
             </div>
-            <div className="grid grid-cols-4 gap-6">
+            <div className="grid grid-cols-4 gap-6 bg-gray">
                 <div className="col-span-3 ">
                     <div className="p-4 text-xl border-b-2 pb-3">
                         Bộ lọc
@@ -46,6 +68,17 @@ const Product = () => {
                     <button className="mt-2 px-3 py-1 border rounded hover:bg-gray-100">Áp dụng</button>
                 </div>
             </div>
+            <div className="flex flex-row-reverse gap-10">
+
+                <button className="bg-white-500 text-black p-2 rounded-full border">
+                    Xem mặt hàng sắp hết
+
+                </button>
+                <button className="bg-white-400 text-black p-2 rounded-full mr-10 border" onClick={handleClickNew}>
+                    Thêm sản phẩm mới
+
+                </button>
+            </div>
             <div className="mt-6 overflow-x-auto">
                 <table className="w-full border border-gray-300 text-sm text-left text-black">
                     <thead className="bg-[#0b2b7a] text-white">
@@ -62,26 +95,26 @@ const Product = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {[1, 2, 3, 4].map((num) => (
-                            <tr key={num} className="bg-white hover:bg-gray-50">
-                                <td className="px-4 py-2 border text-center">{num}</td>
-                                <td className="px-4 py-2 border text-center">MSP001</td>
+                        {list?.map((item) => (
+                            <tr key={item?.maSanPham} className="bg-white hover:bg-gray-50">
+                                <td className="px-4 py-2 border text-center">1</td>
+                                <td className="px-4 py-2 border text-center">{item?.maSanPham}</td>
                                 <td className="px-4 py-2 border">
-                                    Đồ Chơi Cho Chó Tạ Cao Su Chuông TPet Nhai Gặm Sạch Răng
+                                    {item?.tenSanPham}
                                 </td>
-                                <td className="px-4 py-2 border text-center">50g</td>
-                                <td className="px-4 py-2 border text-center">TPet</td>
-                                <td className="px-4 py-2 border text-center">20</td>
-                                <td className="px-4 py-2 border text-center">50.000₫</td>
-                                <td className="px-4 py-2 border text-center">Đồ chơi</td>
+                                <td className="px-4 py-2 border text-center">{item?.kichCo?.tenKichCo}</td>
+                                <td className="px-4 py-2 border text-center">{item?.thuongHieu?.tenThuongHieu}</td>
+                                <td className="px-4 py-2 border text-center">{item?.tonKho}</td>
+                                <td className="px-4 py-2 border text-center">{item?.giaSanPham}₫</td>
+                                <td className="px-4 py-2 border text-center">{item?.loaiSanPham?.tenLoaiSanPham}</td>
                                 <td className="px-4 py-2 border text-center">
                                     <div className="flex justify-center items-center space-x-2">
-                                        <Link to={"/admin/product-detail"}>
+                                        <Link to={`/admin/product-detail/${item?.maSanPham}`}>
                                             <button className="bg-blue-400 text-white p-2 rounded-full hover:bg-blue-500">
                                                 🛠️
                                             </button>
                                         </Link>
-                                        <button className="bg-red-500 text-white p-2 rounded-full hover:bg-red-600">
+                                        <button onClick={() => handleDelete(item?.maSanPham)} className="bg-red-500 text-white p-2 rounded-full hover:bg-red-600">
                                             🗑️
                                         </button>
                                     </div>
