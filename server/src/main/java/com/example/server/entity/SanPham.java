@@ -19,9 +19,9 @@ public class SanPham {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "maSanPham")
     private Integer maSanPham;
-    @Column(name="tenSanPham")
+    @Column(name = "tenSanPham", columnDefinition = "NVARCHAR(255)")
     private String tenSanPham;
-    @Column(name="moTa")
+    @Column(name="moTa", columnDefinition = "NVARCHAR(255)")
     private String moTa;
     @Column(name="hinhAnh")
     private String hinhAnh;

@@ -33,6 +33,9 @@ public class NguoiDung {
     private String cccd;
     @Column(name="sdt")
     private String sdt;
+
+    @Column(name="email")
+    private String email;
     @Column(name="gioiTinh")
     private Integer tonKho;
     @Column(name="ngaySinh")

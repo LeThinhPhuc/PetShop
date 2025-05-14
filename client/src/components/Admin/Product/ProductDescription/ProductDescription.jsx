@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import QuillEditor from "./QuillEditor/QuillEditor";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { createProduct, deleteProduct, fetchProductById, fetchProducts, updateProduct } from "../../../../store/productSlice";
+import { createProduct, deleteProduct, fetchProductById, fetchProducts, updateProduct, uploadProduct } from "../../../../store/productSlice";
 import { fetchBranchs, fetchProductTypes, fetchSizes } from "../../../../store/categorySlice";
 
 export default function ProductDescription() {
@@ -10,6 +10,8 @@ export default function ProductDescription() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { selected, loading, error } = useSelector((state) => state.products);
+    const [preview, setPreview] = useState(null);
+
 
     const { listProductTypes, listSizes, listBranchs } = useSelector((state) => state.categories);
     const [formData, setFormData] = useState({
@@ -25,7 +27,36 @@ export default function ProductDescription() {
     });
     console.log(formData, param);
 
+    const handleFileChange = async (e) => {
+        // setFile(e.target.files[0]);
+        if (e.target.files[0]) {
+            const imageUrl = URL.createObjectURL(e.target.files[0]); // tạo link tạm để xem
+            setPreview(imageUrl);
+        }
+        const formFile = new FormData();
+        formFile.append("file", e.target.files[0]);
 
+        const res = await dispatch(uploadProduct(formFile));
+        console.log("res url ", res?.payload);
+        setFormData((prev) => ({
+            ...prev,
+            hinhAnh: res?.payload,
+        }));
+        console.log("Form data useeffect ", formData)
+    };
+
+
+    // const handleUpload = async () => {
+    //     if (!file) return alert("Please select a file!");
+
+    //     const formFile = new FormData();
+    //     formFile.append("file", file);
+
+    //     const res = await dispatch(uploadProduct(formFile));
+    //     console.log("res url ", res?.payload);
+
+    //     // const data = await res.json();
+    // };
     const handleChange = (e) => {
         setFormData((prev) => ({
             ...prev,
@@ -63,6 +94,7 @@ export default function ProductDescription() {
                 maKichCo: selected.kichCo?.maKichCo,
                 maThuongHieu: selected.thuongHieu?.maThuongHieu,
             });
+            setPreview(selected?.hinhAnh)
         }
     }, [selected]);
 
@@ -190,7 +222,14 @@ export default function ProductDescription() {
 
                     <div>
                         <label className="block font-medium">Hình ảnh <span className="text-red-500">*</span></label>
-                        <input type="file" accept="image/*" className="w-full border rounded-lg p-2" />
+                        <input type="file" onChange={handleFileChange} className="w-full border rounded-lg p-2" />
+                        {preview && (
+                            <img
+                                src={preview}
+                                alt="Preview"
+                                className="mt-2 max-w-[200px] max-h-[200px] object-contain rounded-lg border"
+                            />
+                        )}
                     </div>
                 </div>
             </form>

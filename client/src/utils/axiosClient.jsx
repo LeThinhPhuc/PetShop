@@ -5,10 +5,11 @@ const axiosClient = axios.create({
     baseURL: "http://localhost:8080/",
     timeout: 5000,
     headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",  // Sửa phần Accept thành application/json
+        "Content-Type": "application/json; charset=utf-8", // thêm charset=utf-8
+        Accept: "application/json",
     },
 });
+
 
 // // Gắn token nếu có
 // axiosClient.interceptors.request.use((config) => {

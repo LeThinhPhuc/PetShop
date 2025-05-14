@@ -1,21 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Product from "./Product";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProducts } from "../../store/productSlice";
 const Shopping = () => {
     const images = [
         '/assets/banner1.png',
         '/assets/banner2.png'
     ];
-    const products = new Array(5).fill({
-        name: "Royal Canin",
-        description: "Thức Ăn Hạt Cho Mèo Trưởng Thành Nuôi Trong Nhà Royal Canin Indoor 27",
-        price: "124.000đ",
-        salePrice: "115.000đ",
-        image: "/assets/food.png"
-    });
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { list, loading, error } = useSelector((state) => state.products);
+    useEffect(() => {
+        dispatch(fetchProducts());
+    }, [dispatch]);
+
     return (
         <div className="bg-white">
             <Swiper
@@ -85,9 +87,9 @@ const Shopping = () => {
             <div className="px-4 py-6">
                 <h2 className="text-lg font-semibold mb-4">Được boss yêu thích</h2>
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                    {products.map((product, index) => (
-                        <Link to={'/detail'}>
-                            <Product product={product} index={index} />
+                    {list.map((product) => (
+                        <Link to={`/detail/${product?.maSanPham}`}>
+                            <Product product={product} />
                         </Link>
                     ))}
                 </div>
@@ -97,9 +99,9 @@ const Shopping = () => {
             <div className="px-4 py-6">
                 <h2 className="text-lg font-semibold mb-4">Hàng mới về</h2>
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                    {products.map((product, index) => (
+                    {list.map((product) => (
                         <Link to={'/detail'}>
-                            <Product product={product} index={index} />
+                            <Product product={product} />
                         </Link>
                     ))}
                 </div>

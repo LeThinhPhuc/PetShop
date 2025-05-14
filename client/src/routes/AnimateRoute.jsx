@@ -26,7 +26,7 @@ const AnimateRoute = () => {
         <Routes location={location} key={location.pathname}>
             <Route path="/" element={<Shopping />} />
             <Route path="/pet/:name" element={<ShoppingDog />} />
-            <Route path="/detail" element={<ProductDetail />} />
+            <Route path="/detail/:id" element={<ProductDetail />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/order" element={<Order />} />

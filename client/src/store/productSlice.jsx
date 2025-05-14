@@ -32,6 +32,21 @@ export const createProduct = createAsyncThunk("products/create", async (data, th
     }
 });
 
+// UPLOAD
+export const uploadProduct = createAsyncThunk("products/upload", async (data, thunkAPI) => {
+    try {
+        const response = await fetch("http://localhost:8080/upload", {
+            method: "POST",
+            body: data, // KHÔNG set Content-Type, fetch sẽ tự thêm đúng boundary cho multipart
+        });
+        if (!response.ok) throw new Error("Upload failed");
+        return await response.text();
+    } catch (err) {
+        return thunkAPI.rejectWithValue(err.response?.data || err.message);
+    }
+});
+
+
 // UPDATE
 export const updateProduct = createAsyncThunk("products/update", async ({ id, data }, thunkAPI) => {
     try {

@@ -1,16 +1,44 @@
-import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { fetchProductById, fetchProducts } from "../../store/productSlice";
+import parse from 'html-react-parser';
 export default function ProductDetail() {
-    const [quantity, setQuantity] = useState(1);
-    const [size, setSize] = useState("400g");
-    const sizes = ["400g", "1kg"];
-    const similarProducts = new Array(4).fill({
-        name: "Royal Canin",
-        desc: "Thức Ăn Hạt Cho Mèo Trưởng Thành Nuôi Trong Nhà Royal Canin Indoor 27",
-        oldPrice: "124.000đ",
-        newPrice: "115.000đ",
-        img: "/assets/food.png",
+    const param = useParams();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { list, selected, loading, error } = useSelector((state) => state.products);
+    const [formData, setFormData] = useState({
+        tenSanPham: "",
+        moTa: "",
+        giaSanPham: 0,
+        hinhAnh: "",
+        kichCo: "",
+        tenThuongHieu: "",
     });
+    useEffect(() => {
+        console.log("again ", selected)
+        if (param?.id != 0) {
+            dispatch(fetchProductById(param?.id));
+            dispatch(fetchProducts());
+        }
+    }, [dispatch, param?.id]);
+
+    useEffect(() => {
+
+        console.log("loggg : ", selected)
+        if (selected) {
+            setFormData({
+                tenSanPham: selected.tenSanPham,
+                moTa: selected.moTa,
+                giaSanPham: selected.giaSanPham,
+                hinhAnh: selected.hinhAnh,
+                kichCo: selected.kichCo?.tenKichCo,
+                tenThuongHieu: selected.thuongHieu?.tenThuongHieu,
+            });
+        }
+    }, [selected]);
+    const [quantity, setQuantity] = useState(1);
 
     return (
         <div className="max-w-6xl mx-auto p-4">
@@ -24,13 +52,13 @@ export default function ProductDetail() {
                 {/* Image preview */}
                 <div className="flex flex-col items-center">
                     <div className="w-72 h-72 border rounded mb-4">
-                        <img src="/assets/food.png" className="w-full h-full object-contain" />
+                        <img src={formData?.hinhAnh} className="w-full h-full object-contain" />
                     </div>
                     <div className="flex gap-2">
                         {[...Array(4)].map((_, i) => (
                             <img
                                 key={i}
-                                src="/assets/food.png"
+                                src={formData?.hinhAnh}
                                 className="w-16 h-16 object-contain border rounded"
                             />
                         ))}
@@ -39,8 +67,8 @@ export default function ProductDetail() {
 
                 {/* Info */}
                 <div>
-                    <h2 className="text-xl font-semibold text-blue-700">Thức Ăn Hạt Cho Mèo Trưởng Thành Nuôi Trong Nhà Royal Canin Indoor 27</h2>
-                    <p className="mt-2 text-sm">Thương hiệu: <span className="font-semibold">Royal Canin</span></p>
+                    <h2 className="text-xl font-semibold text-blue-700">{formData?.tenSanPham}</h2>
+                    <p className="mt-2 text-sm">Thương hiệu: <span className="font-semibold">{formData?.tenThuongHieu}</span></p>
 
                     {/* Quantity */}
                     <div className="my-4">
@@ -53,21 +81,17 @@ export default function ProductDetail() {
                     {/* Size */}
                     <div className="mb-4">
                         <label className="font-medium mr-3">Kích cỡ:</label>
-                        {sizes.map(s => (
-                            <button
-                                key={s}
-                                onClick={() => setSize(s)}
-                                className={`px-3 py-1 mr-2 rounded ${size === s ? 'border' : ''}`}
-                            >
-                                {s}
-                            </button>
-                        ))}
+                        <button
+                            className={`px-3 py-1 mr-2 rounded border`}
+                        >
+                            {formData?.kichCo}
+                        </button>
                     </div>
 
                     {/* Price */}
                     <div className="mb-4 text-lg">
-                        <span className="font-semibold text-gray-500 line-through mr-2">{124 * quantity}.000đ</span>
-                        <span className="font-bold text-red-600 text-xl">{115 * quantity}.000đ</span>
+                        <span className="font-semibold text-gray-500 line-through mr-2">{(formData?.giaSanPham * 30 / 100 + formData?.giaSanPham) * quantity}đ</span>
+                        <span className="font-bold text-red-600 text-xl">{formData?.giaSanPham * quantity}đ</span>
                     </div>
 
                     {/* Add to cart */}
@@ -79,7 +103,8 @@ export default function ProductDetail() {
             {/* Mô tả */}
             <div className="my-10 border-t pt-6">
                 <h3 className="text-xl font-semibold mb-3">Mô Tả</h3>
-                <ul className="list-disc list-outside pl-4 space-y-2 text-sm text-justify">
+                {parse(formData?.moTa || "")}
+                {/* <ul className="list-disc list-outside pl-4 space-y-2 text-sm text-justify">
                     <li><strong>Thương hiệu:</strong> Royal Canin</li>
                     <li><strong>Phù hợp cho:</strong> Mèo nhà trưởng thành (trên 12 tháng tuổi)</li>
                     <li>Thức ăn cho mèo Royal Canin Indoor giúp kiểm soát cân nặng, giảm mùi hôi và tốt cho lông mèo.</li>
@@ -93,8 +118,8 @@ export default function ProductDetail() {
                             </li>
                         </ul>
                     </li>
-                </ul>
-                <button className="mt-4 px-4 py-1 border rounded hover:bg-gray-100">Đọc thêm</button>
+                </ul> */}
+                {/* <button className="mt-4 px-4 py-1 border rounded hover:bg-gray-100">Đọc thêm</button> */}
             </div>
 
 
@@ -102,14 +127,13 @@ export default function ProductDetail() {
             <div className="border-t pt-6">
                 <h3 className="text-xl font-semibold mb-6 text-center">Các Sản Phẩm Tương Tự</h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                    {similarProducts.map((p, i) => (
-                        <div key={i} className="border rounded p-2 text-center hover:shadow">
-                            <img src={p.img} alt={p.name} className="h-36 object-contain mx-auto mb-2" />
-                            <h4 className="font-semibold text-blue-600">{p.name}</h4>
-                            <p className="text-sm">{p.desc}</p>
+                    {list.map((p) => (
+                        <div key={p?.maSanPham} className="border rounded p-2 text-center hover:shadow">
+                            <img src={p.hinhAnh} className="h-36 object-contain mx-auto mb-2" />
+                            <h4 className="font-semibold text-blue-600">{p?.tenSanPham}</h4>
                             <div className="text-sm mt-2">
-                                <span className="line-through mr-1 text-gray-400">{p.oldPrice}</span>
-                                <span className="font-bold text-red-600">{p.newPrice}</span>
+                                <span className="line-through mr-1 text-gray-400">{p?.giaSanPham + p?.giaSanPham * 30 / 100}đ</span>
+                                <span className="font-bold text-red-600">{p?.giaSanPham}đ</span>
                             </div>
                         </div>
                     ))}
