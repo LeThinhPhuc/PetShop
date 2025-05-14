@@ -1,2 +1,4 @@
 @import "tailwindcss";
+@import "@fontsource/roboto";
+
 @source "../node_modules/flowbite-datepicker";
