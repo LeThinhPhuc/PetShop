@@ -13,6 +13,7 @@ const Signup = () => {
         ten: "",
         matKhau: "",
         email: "",
+        maVaiTro: 2,
     });
     const handleChange = (e) => {
         setFormData((prev) => ({
@@ -22,15 +23,15 @@ const Signup = () => {
 
 
     };
-    const handleUpdateProduct = async () => {
-        dispatch(signup(formData));
+    const handleSignup = async () => {
+        await dispatch(signup(formData));
     };
     return (
         <div className="max-w-xl mx-auto p-6">
             <h2 className="text-2xl font-bold mb-2">TẠO TÀI KHOẢN</h2>
             <p className="mb-6 text-sm">Vui lòng đăng ký bên dưới để tạo tài khoản</p>
 
-            <form className="space-y-4">
+            <div className="space-y-4">
                 {/* Họ và Tên */}
                 <div className="flex gap-4">
                     <div className="flex-1">
@@ -54,7 +55,7 @@ const Signup = () => {
                     </div>
                     <div className="flex-1">
                         <label className="block mb-1 font-medium">Email :</label>
-                        <input type="text" name="enail" onChange={handleChange} placeholder="Nhập email"
+                        <input type="text" name="email" onChange={handleChange} placeholder="Nhập email"
                             className="w-full border rounded px-3 py-2" />
                     </div>
                 </div>
@@ -79,7 +80,7 @@ const Signup = () => {
 
                 {loading ? "Đang tạo tài khoản..." : "Tạo tài khoản thành công"}                {/* Nút tạo tài khoản và liên kết đăng nhập */}
                 <div className="flex items-center justify-between pt-2">
-                    <button type="submit"
+                    <button type="submit" onClick={handleSignup}
                         className="border px-5 py-2 rounded hover:bg-gray-100 font-medium">
                         Tạo tài khoản
                     </button>
@@ -88,7 +89,7 @@ const Signup = () => {
                         <a href="/login" className="text-blue-600 underline">Đăng nhập</a>
                     </p>
                 </div>
-            </form>
+            </div>
         </div>
     );
 };

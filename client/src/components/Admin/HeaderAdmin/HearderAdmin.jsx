@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { FaSearch, FaUser, FaShoppingBasket } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Modal from "./Modal";
+import { useDispatch } from "react-redux";
+import { logout } from "../../../store/authSlice";
 const HeaderAdmin = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [checkModal, setCheckModal] = useState(false);
     const changeStatus = () => {
         setCheckModal(false);
@@ -29,9 +33,19 @@ const HeaderAdmin = () => {
                     <div className="flex items-center gap-6 text-center text-sm text-white">
                         <div onClick={() => { setCheckModal(true) }}>
                             <FaUser className="mx-auto text-xl" />
-                            <p>Đăng nhập</p>
+                            <p>Admin</p>
                         </div>
                     </div>
+                    <button
+                        onClick={() => {
+                            dispatch(logout())
+                            navigate("/")
+                            window.location.reload(); // hoặc dispatch logout
+                        }}
+                        className="block px-4 py-2 hover:bg-gray-100 text-left"
+                    >
+                        Đăng xuất
+                    </button>
                 </div>
 
                 {/* Navigation */}

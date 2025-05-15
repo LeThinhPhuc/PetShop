@@ -27,7 +27,7 @@ public class SanPhamService {
         this.kichCoRepository = kichCoRepository;
     }
     private SanPham findSanPhamById(String id) {
-        return sanPhamRepository.findById(id)
+        return sanPhamRepository.findById(Integer.valueOf(id))
                 .orElseThrow(() -> new RuntimeException("Question not found with ID: " + id));
     }
 
@@ -106,6 +106,6 @@ public class SanPhamService {
     @Transactional
     public void deleteQuestion(String id) {
         // Finally, delete the question itself
-        sanPhamRepository.deleteById(id);
+        sanPhamRepository.deleteById(Integer.valueOf(id));
     }
 }

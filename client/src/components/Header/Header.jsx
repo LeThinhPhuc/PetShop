@@ -1,8 +1,49 @@
 import { useState } from "react";
+import { jwtDecode } from "jwt-decode"; // ✅ đúng cú pháp ESM
 import { FaSearch, FaUser, FaShoppingBasket } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Modal from "./Modal";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../../store/authSlice";
 const Header = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { loading, error, user } = useSelector(state => state.auth);
+    const token = useSelector(state => state.auth.token);
+    const [formData, setFormData] = useState({
+        tenNguoiDung: "",
+        matKhau: "",
+    });
+    const handleChange = (e) => {
+        setFormData((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value,
+        }));
+
+
+    };
+    const handleLogin = async () => {
+        const action = await dispatch(login(formData));
+        if (action.payload) {
+            const token = action.payload.token;  // Lấy token đúng chỗ
+            if (typeof token === 'string') {
+                const decoded = jwtDecode(token);
+                console.log("Decoded token:", decoded);
+
+                if (decoded.roleId === 1) {
+                    navigate('/admin/product');
+                    window.location.reload();
+                }
+                setCheckModal(false);
+            } else {
+                console.error("Token không phải string:", token);
+            }
+        } else {
+            console.error("Login failed, không có payload");
+        }
+    };
+
+
     const [checkModal, setCheckModal] = useState(false);
     const changeStatus = () => {
         setCheckModal(false);
@@ -34,17 +75,28 @@ const Header = () => {
 
                     {/* Login + Cart */}
                     <div className="flex items-center gap-6 text-center text-sm text-white">
-                        <div onClick={() => { setCheckModal(true) }}>
-                            <FaUser className="mx-auto text-xl" />
-                            <p>Đăng nhập</p>
-                        </div>
-                        <Link
-                            to="/admin/product"
-                            onClick={() => window.location.href = '/admin/product'}
-                        >
-                            <FaUser className="mx-auto text-xl" />
-                            <p>Admin</p>
-                        </Link>
+                        {token ? (
+                            <div className="relative group">
+                                <FaUser className="mx-auto text-xl" />
+                                <p>{token ? jwtDecode(token).sub : ""}</p>
+                                <div className="absolute right-0 mt-2 w-32 bg-white text-black rounded shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-20">
+                                    <button
+                                        onClick={() => {
+                                            localStorage.removeItem('token'); // hoặc tùy backend bạn lưu token ở đâu
+                                            window.location.reload(); // hoặc dispatch logout
+                                        }}
+                                        className="block w-full px-4 py-2 hover:bg-gray-100 text-left"
+                                    >
+                                        Đăng xuất
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div onClick={() => setCheckModal(true)} className="cursor-pointer">
+                                <FaUser className="mx-auto text-xl" />
+                                <p>Đăng nhập</p>
+                            </div>
+                        )}
 
                         <Link to={'/cart'}>
                             <div className="relative">
@@ -127,14 +179,16 @@ const Header = () => {
                         </button>
                         <div className="p-8">
                             <h2 className="text-2xl font-bold mb-6">Đăng Nhập</h2>
-                            <form className="space-y-4">
+                            <div className="space-y-4">
                                 <div>
                                     <label className="block mb-1 text-sm font-medium text-gray-700">
-                                        Email <span className="text-red-500">*</span>
+                                        Tên người dùng <span className="text-red-500">*</span>
                                     </label>
                                     <input
-                                        type="email"
-                                        placeholder="Email"
+                                        // type="email"
+                                        placeholder="Tên người dùng"
+                                        name="tenNguoiDung"
+                                        onChange={handleChange}
                                         className="w-full border px-4 py-2 rounded"
                                         required
                                     />
@@ -147,6 +201,8 @@ const Header = () => {
                                         <input
                                             type="password"
                                             placeholder="Mật khẩu"
+                                            name="matKhau"
+                                            onChange={handleChange}
                                             className="w-full border px-4 py-2 rounded pr-10"
                                             required
                                         />
@@ -155,7 +211,7 @@ const Header = () => {
                                         </span>
                                     </div>
                                 </div>
-                                <button className="w-full bg-orange-400 py-2 rounded hover:bg-orange-500">
+                                <button onClick={handleLogin} className="w-full bg-orange-400 py-2 rounded hover:bg-orange-500">
                                     Đăng nhập
                                 </button>
                                 <div className="text-center text-sm mt-2 space-y-1">
@@ -168,7 +224,7 @@ const Header = () => {
                                         </p>
                                     </Link>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
