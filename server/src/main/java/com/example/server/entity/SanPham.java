@@ -32,6 +32,7 @@ public class SanPham {
     @Column(name="ngayTao")
     private LocalDateTime ngayTao;
     @OneToMany(mappedBy = "sanPham", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<ChiTietHoaDon> danhSachChiTietHoaDon;
     @OneToMany(mappedBy = "sanPham", cascade = CascadeType.ALL)
     @JsonIgnore

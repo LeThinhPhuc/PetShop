@@ -6,6 +6,7 @@ import productService from "../services/ProductService";
 export const fetchProducts = createAsyncThunk("products/fetchAll", async (_, thunkAPI) => {
     try {
         const res = await productService.getAll();
+        console.log("res.data : ", res.data)
         return res.data;
     } catch (err) {
         return thunkAPI.rejectWithValue(err.response?.data || err.message);
