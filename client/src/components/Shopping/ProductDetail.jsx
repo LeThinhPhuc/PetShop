@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { fetchProductById, fetchProducts } from "../../store/productSlice";
 import parse from 'html-react-parser';
+import { themVaoGio } from "../../store/cartSlice";
 export default function ProductDetail() {
     const param = useParams();
     const dispatch = useDispatch();
@@ -39,7 +41,22 @@ export default function ProductDetail() {
         }
     }, [selected]);
     const [quantity, setQuantity] = useState(1);
+    const handleThem = () => {
+        const token = localStorage.getItem("token");
+        if (token == null) {
+            alert("Vui lòng đăng nhập để mua hàng.")
+            return
+        }
+        const decoded = jwtDecode(token);
+        const data = {
+            maNguoiDung: decoded?.id,
+            maSanPham: param?.id,
+            soLuong: quantity,
+            donGia: quantity * formData?.giaSanPham,
+        };
 
+        dispatch(themVaoGio(data));
+    };
     return (
         <div className="max-w-6xl mx-auto p-4">
             {/* Breadcrumb */}
@@ -94,8 +111,8 @@ export default function ProductDetail() {
                         <span className="font-bold text-red-600 text-xl">{formData?.giaSanPham * quantity}đ</span>
                     </div>
 
-                    {/* Add to cart */}
-                    <button className="px-5 py-2 rounded hover:bg-gray-800">Thêm vào giỏ hàng</button>
+                    {/* Ad d to cart */}
+                    <button onClick={handleThem} className="px-5 py-2 rounded hover:bg-gray-800">Thêm vào giỏ hàng</button>
                     <p className="text-sm mt-2 text-gray-500">Miễn phí vận chuyển với đơn nội thành Đà Nẵng</p>
                 </div>
             </div>

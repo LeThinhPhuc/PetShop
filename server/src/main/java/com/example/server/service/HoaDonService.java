@@ -1,7 +1,7 @@
 package com.example.server.service;
 
 import com.example.server.dto.CartItemDTO;
-import com.example.server.dto.SanPhamDTO;
+import com.example.server.dto.ItemDTO;
 import com.example.server.entity.ChiTietHoaDon;
 import com.example.server.entity.HoaDon;
 import com.example.server.entity.NguoiDung;
@@ -11,9 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class HoaDonService {
@@ -27,13 +28,42 @@ public class HoaDonService {
         this.sanPhamRepository = sanPhamRepository;
         this.nguoiDungRepository = nguoiDungRepository;
     }
-    public HoaDon getGioHangByUserId(Integer userId) {
+    public List<ItemDTO> getGioHangByUserId(Integer userId) {
         NguoiDung nguoiDung = nguoiDungRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
 
-        return hoaDonRepository.findByNguoiDungAndLoai(nguoiDung, 0) // 0 = giỏ hàng
+        HoaDon gioHang = hoaDonRepository.findByNguoiDungAndLoai(nguoiDung, 0)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy giỏ hàng"));
+
+        return gioHang.getDanhSachChiTietHoaDon().stream()
+                .map(cthd -> new ItemDTO(
+                        cthd.getSanPham().getMaSanPham(),
+                        cthd.getSanPham().getTenSanPham(),
+                        cthd.getSanPham().getHinhAnh(),
+                        cthd.getDonGia(),
+                        cthd.getSoLuong()
+                ))
+                .collect(Collectors.toList());
     }
+
+    public List<ItemDTO> getDonHangByUserId(Integer userId) {
+        NguoiDung nguoiDung = nguoiDungRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+
+        HoaDon gioHang = hoaDonRepository.findByNguoiDungAndLoai(nguoiDung, 1)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng"));
+
+        return gioHang.getDanhSachChiTietHoaDon().stream()
+                .map(cthd -> new ItemDTO(
+                        cthd.getSanPham().getMaSanPham(),
+                        cthd.getSanPham().getTenSanPham(),
+                        cthd.getSanPham().getHinhAnh(),
+                        cthd.getDonGia(),
+                        cthd.getSoLuong()
+                ))
+                .collect(Collectors.toList());
+    }
+
 
 
     // Create a new question

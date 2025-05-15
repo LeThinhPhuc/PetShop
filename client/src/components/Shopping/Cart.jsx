@@ -1,6 +1,11 @@
 import { FaTimes } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import { useDispatch, useSelector } from "react-redux";
+import { getGioHang } from "../../store/cartSlice";
 const Cart = () => {
+    const dispatch = useDispatch();
+    const { gioHang, loading, error } = useSelector((state) => state.cart);
     const [cartItems, setCartItems] = useState([
         {
             id: 1,
@@ -17,6 +22,15 @@ const Cart = () => {
             quantity: 2,
         },
     ]);
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token == null) {
+            alert("Vui lòng đăng nhập để mua hàng.")
+            return
+        }
+        const decoded = jwtDecode(token);
+        dispatch(getGioHang(decoded?.id));
+    }, [dispatch]);
     const similarProducts = new Array(4).fill({
         name: "Royal Canin",
         desc: "Thức Ăn Hạt Cho Mèo Trưởng Thành Nuôi Trong Nhà Royal Canin Indoor 27",
@@ -64,57 +78,63 @@ const Cart = () => {
                     </div>
 
                     {/* Danh sách sản phẩm */}
-                    {cartItems.map((item) => (
-                        <div
-                            key={item.id}
-                            className="grid grid-cols-4 items-center p-3 border-b border-gray-200 hover:bg-gray-50 transition"
-                        >
-                            {/* Cột Sản phẩm */}
-                            <div className="flex items-center gap-4">
-                                <img
-                                    src={item.image}
-                                    alt={item.name}
-                                    className="w-16 h-16 object-cover rounded"
-                                />
-                                <span className="font-medium">{item.name}</span>
-                            </div>
-
-                            {/* Cột Giá */}
-                            <div className="text-center font-bold">
-                                {item.price.toLocaleString()} đ
-                            </div>
-
-                            {/* Cột Số lượng */}
-                            <div className="flex items-center justify-center gap-2">
-                                <button
-                                    className="w-7 h-7 flex items-center justify-center rounded bg-gray-200 hover:bg-gray-300"
-                                    onClick={() => decreaseQuantity(item.id)}
-                                >
-                                    -
-                                </button>
-                                <span className="w-6 text-center">{item.quantity}</span>
-                                <button
-                                    className="w-7 h-7 flex items-center justify-center rounded bg-gray-200 hover:bg-gray-300"
-                                    onClick={() => increaseQuantity(item.id)}
-                                >
-                                    +
-                                </button>
-                            </div>
-
-                            {/* Cột Tổng tiền + nút xóa */}
-                            <div className="text-center flex justify-center items-center gap-2">
-                                <span className="font-bold">
-                                    {(item.price * item.quantity).toLocaleString()} đ
-                                </span>
-                                <button
-                                    className="text-red-500 hover:text-red-700"
-                                    onClick={() => removeItem(item.id)}
-                                >
-                                    <FaTimes />
-                                </button>
-                            </div>
+                    {gioHang?.length === 0 ? (
+                        <div className="p-4 text-center text-gray-500">
+                            Giỏ hàng trống
                         </div>
-                    ))}
+                    ) : (
+                        gioHang?.map((item) => (
+                            <div
+                                key={item.maSanPham}
+                                className="grid grid-cols-4 items-center p-3 border-b border-gray-200 hover:bg-gray-50 transition"
+                            >
+                                {/* Cột Sản phẩm */}
+                                <div className="flex items-center gap-4">
+                                    <img
+                                        src={item.hinhAnh}
+                                        alt={item.tenSanPham}
+                                        className="w-16 h-16 object-cover rounded"
+                                    />
+                                    <span className="font-medium">{item.tenSanPham}</span>
+                                </div>
+
+                                {/* Cột Giá */}
+                                <div className="text-center font-bold">
+                                    {item.giaSanPham.toLocaleString()} đ
+                                </div>
+
+                                {/* Cột Số lượng */}
+                                <div className="flex items-center justify-center gap-2">
+                                    <button
+                                        className="w-7 h-7 flex items-center justify-center rounded bg-gray-200 hover:bg-gray-300"
+                                        onClick={() => decreaseQuantity(item.maSanPham)}
+                                    >
+                                        -
+                                    </button>
+                                    <span className="w-6 text-center">{item.soLuong}</span>
+                                    <button
+                                        className="w-7 h-7 flex items-center justify-center rounded bg-gray-200 hover:bg-gray-300"
+                                        onClick={() => increaseQuantity(item.maSanPham)}
+                                    >
+                                        +
+                                    </button>
+                                </div>
+
+                                {/* Cột Tổng tiền + nút xóa */}
+                                <div className="text-center flex justify-center items-center gap-2">
+                                    <span className="font-bold">
+                                        {(item.giaSanPham * item.soLuong).toLocaleString()} đ
+                                    </span>
+                                    <button
+                                        className="text-red-500 hover:text-red-700"
+                                        onClick={() => removeItem(item.maSanPham)}
+                                    >
+                                        <FaTimes />
+                                    </button>
+                                </div>
+                            </div>
+                        ))
+                    )}
 
                     <textarea
                         placeholder="Ghi chú"
@@ -131,8 +151,8 @@ const Cart = () => {
                         <p className="grid grid-cols-2 text-lg font-medium mb-2">
                             Tổng cộng:
                             <span>
-                                {cartItems
-                                    .reduce((total, item) => total + item.price * item.quantity, 0)
+                                {gioHang
+                                    .reduce((total, item) => total + item.giaSanPham * item.soLuong, 0)
                                     .toLocaleString()}{" "}
                                 đ
                             </span>
